@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang = 'ru'>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <title>
+        База учета нарушителей
+    </title>
+</head>
+<body>
+    <nav>
+        <div class = "nav-wrapper">
+            <a class = "brand-logo center">База нарушителей</a>
+        </div>
+
+    </nav>
+
+
+    <ul class='collection'>
+
+    </ul>
+
+    <script>
+        //Add
+        const electron = require('electron');
+        const {ipcRenderer} = electron;
+        const ul = document.querySelector('ul');
+
+        ipcRenderer.on('item:add', function(e,item)
+        {
+            const li = document.createElement('li');
+            const itemText = document.createTextNode(item);
+
+            
+            li.className = 'collection-item';
+            li.appendChild(itemText);
+
+            
+            ul.appendChild(li);
+        });
+
+        //Remove
+        ul.addEventListener('dblclick', removeItem);
+        function removeItem(e)
+        {
+            e.target.remove();
+            
+        }
+
+        
+
+    </script>
+</body>
+
+
+
+
+</html>
