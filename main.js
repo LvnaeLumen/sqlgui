@@ -1,9 +1,13 @@
-const {BrowserWindow, app, ipcMain, Notification,
+const {BrowserWindow, Component, app, ipcMain, Notification,
 Menu} = require('electron');
 const path = require('path');
 let mainWindow;
 let addWindow;
 
+function App()
+{
+    return null;
+}
 function createWindow()
 {
     
@@ -21,12 +25,17 @@ function createWindow()
     })
 
     global.mainWindow = mainWindow;
+    
+    
 
     //Build menu from template
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     Menu.setApplicationMenu(mainMenu);
 
     mainWindow.loadFile('mainWindow.html')
+
+
+    let server = require('./server/server.js')
 
     //Quit app when closed
     mainWindow.on('closed', function()
@@ -42,6 +51,7 @@ require('electron-reload')(__dirname,{
 
 
 app.whenReady().then(createWindow);
+
 
 
 //Handle create add window

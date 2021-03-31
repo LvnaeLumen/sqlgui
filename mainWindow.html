@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang = 'ru'>
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <meta charset="UTF-8">
+    <link rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    
     <title>
         База учета нарушителей
     </title>
@@ -14,6 +17,157 @@
 
     </nav>
 
+    <div class ="container">
+        <div class = "row">
+            <div class = "col s12">
+                <ul class = "tabs">
+                    
+                
+                    <li class="tab col s3"><a href="#Cars" class="">Cars</a></li>
+                    <li class="tab col s3"><a href="#Drivers" class="">Drivers</a></li>
+                    <li class="tab col s3"><a href="#Accidents" class="">Accidents</a></li>
+                    <li class="tab col s3"><a href="#Violations" class="">Violations</a></li>
+                
+                </ul>
+            </div>
+
+            <div id="Cars">
+                <table>
+                    <thead>
+                      <tr>
+                          <th>idCar</th>
+                          <th>GovNumber</th>
+                          <th>idDriver</th>
+                          <th>insuranceSum</th>
+                      </tr>
+                    </thead>
+            
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>322</td>
+                        <td>1</td>
+                        <td>300000</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>228</td>
+                        <td>3</td>
+                        <td>690000</td>
+                      </tr>
+                      
+                    </tbody>
+                  </table>
+            </div>
+            <div id="Drivers">
+                <table>
+                    <thead>
+                      <tr>
+                          <th>idDriver</th>
+                          <th>Name</th>
+                          <th>Surname</th>
+                          <th>Passport</th>
+                      </tr>
+                    </thead>
+            
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>Michael</td>
+                        <td>Jackson</td>
+                        <td>88005553535</td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>Alan</td>
+                        <td>Jellybean</td>
+                        <td>1251291824</td>
+                      </tr>
+                      <tr>
+                        <td>3</td>
+                        <td>Jonathan</td>
+                        <td>Lollipop</td>
+                        <td>8918623128</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+            <div id="Accidents">
+                <table>
+                    <thead>
+                      <tr>
+                          <th>idAccident</th>
+                          <th>idViolation</th>
+                          <th>idCar</th>
+                          <th>idDriver</th>
+                          <th>date</th>
+                          <th>time</th>
+                      </tr>
+                    </thead>
+            
+                    <tbody>
+                      <tr>
+                        <td>Alvin</td>
+                        <td>Eclair</td>
+                        <td>$0.87</td>
+                      </tr>
+                      <tr>
+                        <td>Alan</td>
+                        <td>Jellybean</td>
+                        <td>$3.76</td>
+                      </tr>
+                      <tr>
+                        <td>Jonathan</td>
+                        <td>Lollipop</td>
+                        <td>$7.00</td>
+                      </tr>
+                    </tbody>
+                  </table>
+            </div>
+            <div id="Violations"><table>
+                <thead>
+                  <tr>
+                      <th>idViolation</th>
+                      <th>fine</th>
+                      <th>Violation</th>
+                  </tr>
+                </thead>
+        
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>300</td>
+                    <td>Speed limit</td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>500</td>
+                    <td>Horny Overdose</td>
+                  </tr>
+                </tbody>
+              </table></div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            M.AutoInit();
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems, options);
+        });
+    </script>
+
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js">
+        var elem = $('.tabs')
+        var options = {}
+        var instance = M.Tabs.init(elem, options);
+    </script> 
+    
+    
+
+
+
+    
+
 
     <ul class='collection'>
 
@@ -24,6 +178,10 @@
         const electron = require('electron');
         const {ipcRenderer} = electron;
         const ul = document.querySelector('ul');
+
+        
+
+       
 
         ipcRenderer.on('item:add', function(e,item)
         {
