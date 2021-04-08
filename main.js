@@ -119,8 +119,8 @@ function loadDatabase()
 
     let connection = mysql.createConnection({
       host: 'localhost',
-      user: 'root',
-      password: 'кщще',
+      user: 'ivan',
+      password: 'root',
       port: '3306',
       database: 'mydb'
     });

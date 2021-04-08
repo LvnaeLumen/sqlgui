@@ -27,7 +27,7 @@
 
     </nav>
 
-    
+        
     <div class ="container">
         <div class = "row">
             <div class = "col s12">
@@ -41,18 +41,22 @@
                 
                 </ul>
             </div>
+            <div>
+
+            </div>
 
             
             <div id="Cars">
               
+       
+              <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="AddToCars()">Add</a>
+              <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="RemoveFromCars()">Remove</a>
+     
                 <table id = "CarsList">
                   
                   <!-- Dropdown Trigger -->
      
        
-                <a class="btn waves-effect waves-light red lighten-2" onclick="AddToCars()">Add</a>
-                <a class="btn waves-effect waves-light red lighten-2" onclick="RemoveFromCars()">Remove</a>
-
                 <script>
                   function AddToCars() {
                     var x = document.getElementById("add_cars_table_menu");
@@ -78,13 +82,11 @@
                 
                   <div id="add_cars_table_menu"; style="display: none;">
 
-                    
-                      <input type="number" placeholder="ID" id = "idCar" autofocus>
                       <input type="text" maxlength="8" placeholder="Госномер" id = "govNumber" autofocus>
                       <input type="number" placeholder="ID Водителя" id = "idDriver" autofocus>
                       <input type="number" placeholder="Сумма страховки" id = "insuranceSum" autofocus>
                     
-                      <a class="btn waves-effect waves-light red lighten-2" onclick="SendCars()">Add</a>
+                      <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="SendCars()">Submit</a>
                     
                   </div>
                   
@@ -93,7 +95,7 @@
                     
                     <input type="number" id = "idCarRemove" placeholder="ID" autofocus>
                   
-                    <a class="btn waves-effect waves-light red lighten-2" onclick="RemoveCars()">Remove</a>
+                    <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="RemoveCars()">Sumbit</a>
                   
                   </div>  
 
@@ -104,43 +106,45 @@
                   const electron = require('electron');
                   const {ipcRenderer} = electron;
 
-                  const form = document.querySelector('#add_cars_table_menu');
-                  form.addEventListener('idCar', SendCars);
+                  const form_cars = document.querySelector('#add_cars_table_menu');
+                  form_cars.addEventListener('idCar', SendCars);
 
                   function SendCars()
                   {                      
                       
-                      var idCar =  document.querySelector('#idCar').value;
-                      console.log(idCar);
+                      
                       var govNumber =  document.querySelector('#govNumber').value;
                       var idDriver =  document.querySelector('#idDriver').value;
                       var insuranceSum =  document.querySelector('#insuranceSum').value;
 
 
-                      var check = (idCar != 'null')&&(idCar != "")
-                                &&(govNumber != '')&&(govNumber != '') 
+                      var check = (govNumber != '')&&(govNumber != '') 
                                 &&(idDriver != '')&&(idDriver != '')
                                 &&(insuranceSum != '')&&(insuranceSum != '');
                       
-
+                      
                       if(check)
                       {
                         let mysql = require('mysql');
                         let connection = mysql.createConnection({
                           host: 'localhost',
-                          user: 'root',
-                          password: 'кщще',
+                          user: 'ivan',
+                          password: 'root',
                           port: '3306',
                           database: 'mydb'
                         });
-                        const data = [idCar, govNumber, idDriver, insuranceSum];
+                        
                         var sql = "SET foreign_key_checks = 0;";
                         var query = connection.query(sql, function(err, results) {
                           
                           if(err) console.log(err);
                           
                         });
-                        sql = "INSERT INTO `car` (`idCar`, `govNumber`, `idDriver`, `insuranceSum`) VALUES(?,?,?,?);";
+
+                      
+                      const data = [govNumber, idDriver, insuranceSum];
+                          
+                        sql = "INSERT INTO `cars` (`govNumber`, `idDriver`, `insuranceSum`) VALUES(?,?,?);";
                         var query = connection.query(sql, data, function(err, results) {
                           
                           if(err) console.log(err);
@@ -171,8 +175,8 @@
                         let mysql = require('mysql');
                         let connection = mysql.createConnection({
                           host: 'localhost',
-                          user: 'root',
-                          password: 'кщще',
+                          user: 'ivan',
+                          password: 'root',
                           port: '3306',
                           database: 'mydb'
                         });
@@ -183,7 +187,7 @@
                           if(err) console.log(err);
                           
                         });
-                        sql = "DELETE FROM `car` WHERE idCar  = ? ;";
+                        sql = "DELETE FROM `cars` WHERE idCar  = ? ;";
                         var query = connection.query(sql, idCar, function(err, results) {
                           
                           if(err) console.log(err);
@@ -222,10 +226,156 @@
             </div>
             
             <div id="Drivers">
-                <table>
+              <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="AddToDrivers()">Add</a>
+              <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="RemoveFromDrivers()">Remove</a>
+
+              <table id = 'DriversList'>
+                  
+                <script>
+                  function AddToDrivers() {
+                    var x = document.getElementById("add_drivers_table_menu");
+                    if (x.style.display === "none") {
+                      x.style.display = "block";
+                    } else {
+                      x.style.display = "none";
+                    }
+                  }
+                  </script>
+
+                 <script>
+                  function RemoveFromDrivers() {
+                    var x = document.getElementById("remove_drivers_table_menu");
+                    if (x.style.display === "none") {
+                      x.style.display = "block";
+                    } else {
+                      x.style.display = "none";
+                    }
+                  }
+                  </script>
+
+                
+                  <div id="add_drivers_table_menu"; style="display: none;">
+
+                      <input type="text" maxlength="8" placeholder="Имя" id = "Name" autofocus>
+                      <input type="text" placeholder="Фамилия" id = "Surname" autofocus>
+                      <input type="text" placeholder="Паспорт" id = "Passport" autofocus>
+                    
+                      <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="SendDrivers()">Submit</a>
+                    
+                  </div>
+                  
+                  <div id="remove_drivers_table_menu"; style="display: none;">
+
+                    
+                    <input type="number" id = "idDriverRemove" placeholder="ID" autofocus>
+                  
+                    <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="RemoveDrivers()">Sumbit</a>
+                  
+                  </div>  
+
+                <script>
+                  
+                  const form_drivers = document.querySelector('#add_drivers_table_menu');
+                  form_drivers.addEventListener('idDriver', SendDrivers);
+
+                  function SendDrivers()
+                  {                      
+                      
+                      
+                      var Name =  document.querySelector('#Name').value;
+                      var Surname =  document.querySelector('#Surname').value;
+                      var Passport =  document.querySelector('#Passport').value;
+
+
+                      var check = (Name != '')&&(Name != null) 
+                                &&(Surname != '')&&(Surname != null)
+                                &&(Passport != '')&&(Passport != null);
+                      
+                      if(check)
+                      {
+                        let mysql = require('mysql');
+                        let connection = mysql.createConnection({
+                          host: 'localhost',
+                          user: 'ivan',
+                          password: 'root',
+                          port: '3306',
+                          database: 'mydb'
+                        });
+                        
+                        var sql = "SET foreign_key_checks = 0;";
+                        var query = connection.query(sql, function(err, results) {
+                          
+                          if(err) console.log(err);
+                          
+                        });
+                      const data = [Name, Surname, Passport];
+                          
+                        sql = "INSERT INTO `Driver` (`Name`, `Surname`, `Passport`) VALUES(?,?,?);";
+                        var query = connection.query(sql, data, function(err, results) {
+                          
+                          if(err) console.log(err);
+                          
+                        });
+                        sql = "SET foreign_key_checks = 1;";                       
+                        
+                        var query = connection.query(sql, function(err, results) {
+                          
+                            if(err) console.log(err);
+                            else console.log("Данные добавлены");
+                        
+                        });
+                        connection.end();
+                        
+                      }
+                  }
+
+                  function RemoveDrivers()
+                  {
+                    
+                      var idDriver =  document.querySelector('#idDriverRemove').value;
+                      console.log(idDriver);
+                      
+                      var check = (idDriver != 'null')&&(idDriver != "");
+                      if(check)
+                      {
+                        
+                        let mysql = require('mysql');
+                        let connection = mysql.createConnection({
+                          host: 'localhost',
+                          user: 'ivan',
+                          password: 'root',
+                          port: '3306',
+                          database: 'mydb'
+                        });
+                        
+                        var sql = "SET foreign_key_checks = 0;";
+                        var query = connection.query(sql, function(err, results) {
+                          
+                          if(err) console.log(err);
+                          
+                        });
+                        sql = "DELETE FROM `Driver` WHERE idDriver  = ? ;";
+                        var query = connection.query(sql, idDriver, function(err, results) {
+                          
+                          if(err) console.log(err);
+                          
+                        });
+                        sql = "SET foreign_key_checks = 1;";                       
+                        
+                        var query = connection.query(sql, function(err, results) {
+                          
+                            if(err) console.log(err);
+                            else console.log("Данные удалены");
+                        
+                        });
+                        connection.end();
+                        
+                      }
+                  }
+                  
+                  </script>
+
                     <thead>
-                      <a class="btn waves-effect waves-light red lighten-2" target="_blank" href="https://gitter.im/Dogfalo/materialize">Add</a>
-                      <a class="btn waves-effect waves-light red lighten-2" target="_blank" href="https://gitter.im/Dogfalo/materialize">Remove</a>
                       <tr>
                           <th>idDriver</th>
                           <th>Name</th>
@@ -234,33 +384,16 @@
                       </tr>
                     </thead>
             
-                    <tbody #>
-                      <tr>
-                        <td>1</td>
-                        <td>Michael</td>
-                        <td>Jackson</td>
-                        <td>88005553535</td>
-                      </tr>
-                      <tr>
-                        <td>2</td>
-                        <td>Alan</td>
-                        <td>Jellybean</td>
-                        <td>1251291824</td>
-                      </tr>
-                      <tr>
-                        <td>3</td>
-                        <td>Jonathan</td>
-                        <td>Lollipop</td>
-                        <td>8918623128</td>
-                      </tr>
-                    </tbody>
                   </table>
             </div>
             <div id="Accidents">
-                <table>
+                <table id= "AccidentsList">
+                  <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="AddToAccidents()">Add</a>
+                  <a class="btn waves-effect waves-light red lighten-2 btn-small" onclick="RemoveFromAccidents()">Remove</a>
+
+                  
+
                     <thead>
-                      <a class="btn waves-effect waves-light red lighten-2" target="_blank" href="https://gitter.im/Dogfalo/materialize">Add</a>
-                      <a class="btn waves-effect waves-light red lighten-2" target="_blank" href="https://gitter.im/Dogfalo/materialize">Remove</a>
                       <tr>
                           <th>idAccident</th>
                           <th>idViolation</th>
@@ -271,20 +404,12 @@
                       </tr>
                     </thead>
             
-                    <tbody >
-                      
-                      <tr>
-                        <td>Alvin</td>
-                        <td>Eclair</td>
-                        <td>$0.87</td>
-                      </tr>
-                    </tbody>
                   </table>
             </div>
             <div id="Violations"><table>
                 <thead>
-                  <a class="btn waves-effect waves-light red lighten-2" target="_blank" href="https://gitter.im/Dogfalo/materialize">Add</a>
-                  <a class="btn waves-effect waves-light red lighten-2" target="_blank" href="https://gitter.im/Dogfalo/materialize">Remove</a>
+                  <a class="btn waves-effect waves-light red lighten-2 btn-small" target="_blank" href="https://gitter.im/Dogfalo/materialize">Add</a>
+                  <a class="btn waves-effect waves-light red lighten-2 btn-small" target="_blank" href="https://gitter.im/Dogfalo/materialize">Remove</a>
                   <tr>
                       <th>idViolation</th>
                       <th>fine</th>
@@ -365,19 +490,35 @@
 
           let connection = mysql.createConnection({
             host: 'localhost',
-            user: 'root',
-            password: 'кщще',
+            user: 'ivan',
+            password: 'root',
             port: '3306',
             database: 'mydb'
           });
           $("#CarsList tbody tr").remove(); 
           
-          var car_query = 'SELECT * from `car`';
+          var car_query = 'SELECT * from `cars`';
           connection.query(car_query, function (error, result, fields) {
                       
             for (i=0 ; i < result.length ; i++){
               
               $('#CarsList').append('<tr><td>'+result[i].idCar+'</td><td>'+result[i].GovNumber+'</td><td>'+result[i].idDriver+'</td><td>'+result[i].insuranceSum+'</td></tr>');
+            }
+            
+            
+                
+                //$('#resultDiv').text(results[0].emp_name); //emp_name is column name in your database
+            
+          });
+
+          $("#DriversList tbody tr").remove(); 
+          
+          var car_query = 'SELECT * from `Driver`';
+          connection.query(car_query, function (error, result, fields) {
+                      
+            for (i=0 ; i < result.length ; i++){
+              
+              $('#DriversList').append('<tr><td>'+result[i].idDriver+'</td><td>'+result[i].Name+'</td><td>'+result[i].Surname+'</td><td>'+result[i].Passport+'</td></tr>');
             }
             
             
