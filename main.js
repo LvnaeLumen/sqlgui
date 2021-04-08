@@ -1,8 +1,10 @@
 const {BrowserWindow, Component, app, ipcMain, Notification,
 Menu} = require('electron');
 const path = require('path');
+
 let mainWindow;
 let addWindow;
+let closeWindow;
 
 function App()
 {
@@ -26,8 +28,6 @@ function createWindow()
 
     global.mainWindow = mainWindow;
     
-    
-
     //Build menu from template
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     Menu.setApplicationMenu(mainMenu);
@@ -55,21 +55,21 @@ app.whenReady().then(createWindow);
 
 
 //Handle create add window
-function createAddWindow()
+function createAddWindowIncident()
 {
     
     addWindow = new BrowserWindow({
         width: 300,
         height: 300,
         title: 'Add Element',
-        backgroundColor: "white",
+        
         webPreferences:
         {
             nodeIntegration: true,
             contextIsolation: false
             
         },
-        title:'Загрузка таблицы'
+        
     })
     addWindow.loadFile('loadWindow.html')
 
@@ -81,15 +81,69 @@ function createAddWindow()
 
 }
 
-//Add element
-ipcMain.on('item:add', function(e, item)
+function createRemoveWindow()
 {
-    console.log(item);
     
-    global.mainWindow.webContents.send("item:add", item);
-    
+    removeWindow = new BrowserWindow({
+        width: 300,
+        height: 300,
+        title: 'Remove Element',
+        
+        webPreferences:
+        {
+            nodeIntegration: true,
+            contextIsolation: false
+            
+        },
+        
+    })
+    removeWindow.loadFile('removeWindow.html')
+
+    //Garbage
+    removeWindow.on('close', function()
+    {
+        removeWindow = null;
+    })
+
 }
-);
+
+function refreshDatabase()
+{
+    global.mainWindow.webContents.send("database:refresh", 1);
+}
+
+function loadDatabase()
+{
+
+    let mysql = require('mysql');
+
+    let connection = mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: 'кщще',
+      port: '3306',
+      database: 'mydb'
+    });
+    connection.connect(function(err) {
+        if (err) {
+          return console.error('error: ' + err.message);
+        }
+
+
+
+      
+        console.log('Connected to the MySQL server.');
+        connection.end();
+
+       
+      });
+
+      
+       connection.end();
+    
+
+}
+
 
 
 const mainMenuTemplate = 
@@ -98,10 +152,19 @@ const mainMenuTemplate =
         label:'База данных',
         submenu:[
             {
-                label:'Обновить'
+                label:'Обновить',
+                accelerator:'F5',
+                click()
+                {
+                    refreshDatabase();
+                }
             },
             {
-                label:'Загрузить'
+                label:'Загрузить',
+                click()
+                {
+                    loadDatabase();
+                }
             },
             {
                 label:'Выйти',
@@ -110,34 +173,6 @@ const mainMenuTemplate =
                 {
                     app.quit();
                 }
-            },
-            
-        ]
-    },
-    {
-        label:'Инциденты',
-        submenu:[
-            {
-                label:'Добавить',
-                click()
-                {
-                    createAddWindow();
-                }
-            },
-            {
-                label:'Убрать'
-            },
-            
-        ]
-    },
-    {
-        label:'Нарушители',
-        submenu:[
-            {
-                label:'Добавить'
-            },
-            {
-                label:'Убрать'
             },
             
         ]
